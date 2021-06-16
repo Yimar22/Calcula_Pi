@@ -21,17 +21,50 @@
  * Contributor(s): Christophe Demarey
  *                 Nicolas Dolet
  *                 Philippe Merle
+ *
  */
 package org.ow2.frascati.examples.helloworld.annotated;
 
-import org.osoa.sca.annotations.Service;
+import java.util.Random;
 
-/**
- * A basic service used to print messages. 
- */
-@Service
-public interface GenerarPts
+import org.osoa.sca.annotations.Property;
+
+public class Node
+  implements GenerarPts
 {
-    int generarPts(long seed, long ptsTotales);
-    int generarPts(long seed, long ptsTotales, int nodos);
+    @Property
+    private String header = "->";
+
+    public Server()
+    {
+        System.out.println("SERVER created.");
+    }
+
+	public int generarPts(long seed, long ptsTotales) {
+		Random rnd = new Random(seed);
+		
+		int dentro = 0;
+		
+		double x, y;
+		
+		for(int i=0; i<ptsTotales; i++) {
+			
+			x = rnd.nextDouble();
+			y = rnd.nextDouble();
+			
+			if((x * x) + (y * y) <= 1) {
+				dentro++;
+			}
+		}
+		
+		System.out.println(dentro);
+		
+		return dentro;
+
+	}
+
+	public int generarPts(long seed, long ptsTotales, int nodos) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

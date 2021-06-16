@@ -30,8 +30,7 @@ import org.osoa.sca.annotations.Service;
  * A basic service used to print messages. 
  */
 @Service
-public interface GenerarPts
+public interface CalcularPi
 {
-    int generarPts(long seed, long ptsTotales);
-    int generarPts(long seed, long ptsTotales, int nodos);
+	double calcularPi(long ptsTotal, int nodos, long seed)
 }

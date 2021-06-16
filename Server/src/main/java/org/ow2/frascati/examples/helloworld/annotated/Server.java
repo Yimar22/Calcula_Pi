@@ -25,41 +25,95 @@
  */
 package org.ow2.frascati.examples.helloworld.annotated;
 
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.osoa.sca.annotations.Property;
+import org.osoa.sca.annotations.Init;
+import org.osoa.sca.annotations.Reference;
 
-public class Server
-  implements GenerarPts
+public class Server implements CalcularPi
 {
     @Property
     private String header = "->";
+    
+    private GenerarPts generarPts;
+    private GenerarPts generarPts1;
+    private GenerarPts generarPts2;
+    private GenerarPts generarPts3;
+    
+    private static ArrayList<GenerarPts> nodes = new ArrayList<GenerarPts>();
+    
+    @Reference(name="generarPts")
+	public final void setGenerarPts(
+			GenerarPts generarPts) {
+		this.generarPts = generarPts;
+	}
+
+    @Reference(name="generarPts1")
+	public final void setGenerarPts1(
+			GenerarPts generarPts1) {
+		this.generarPts1 = generarPts1;
+	}
+
+    @Reference(name="generarPts2")
+	public final void setGenerarPts2(
+			GenerarPts generarPts2) {
+		this.generarPts2 = generarPts2;
+	}
+
+    @Reference(name="generarPts3")
+	public final void setGenerarPts3(
+			GenerarPts generarPts3) {
+		this.generarPts3 = generarPts3;
+	}
 
     public Server()
     {
         System.out.println("SERVER created.");
     }
-
-	public int generarPts(long seed, long ptsTotales) {
-		Random rnd = new Random(seed);
+	
+	public double calcularPi(long ptsTotal, int nodos, long seed) {
 		
-		int dentro = 0;
+		long inicio = System.currentTimeMillis();
 		
-		double x, y;
+		nodes.add(generarPts);
+		nodes.add(generarPts1);
+		nodes.add(generarPts2);
+		nodes.add(generarPts3);
 		
-		for(int i=0; i<ptsTotales; i++) {
-			
-			x = rnd.nextDouble();
-			y = rnd.nextDouble();
-			
-			if((x * x) + (y * y) <= 1) {
-				dentro++;
-			}
+		int ptsDentro = 0;
+		
+		ExecutorService executor = Executors.newFixedThreadPool(nodes.size());
+		
+		switch (nodos) {
+			case 1:
+				
+				
+				
+				break;
+				
+			case 2:
+				
+				break;
+				
+			case 3:
+				
+				break;
+				
+			case 4:
+				
+				break;
+				
+			default:
+				break;
 		}
 		
-		System.out.println(dentro);
-		
-		return dentro;
-
+        double pi = 4 * ((double) ptsDentro / (ptsTotal));
+        
+        return pi;
 	}
+	
 }

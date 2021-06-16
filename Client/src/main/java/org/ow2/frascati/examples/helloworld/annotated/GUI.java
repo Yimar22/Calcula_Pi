@@ -13,14 +13,13 @@ import javax.swing.JLabel;
 public class GUI extends JFrame {
 
 	private JPanel contentPane;
+
 	private JTextField pointsTF, seedTF, nodesTF;	
 	private JButton calculate, loadFile;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
-		
-	
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -90,4 +89,45 @@ public class GUI extends JFrame {
 		lblNewLabel_3.setBounds(222, 101, 65, 14);
 		contentPane.add(lblNewLabel_3);
 	}
+	
+	public JPanel getContentPane() {
+		return contentPane;
+	}
+
+	public JTextField getPointsTF() {
+		return pointsTF;
+	}
+
+	public JTextField getSeedTF() {
+		return seedTF;
+	}
+
+	public JTextField getNodesTF() {
+		return nodesTF;
+	}
+
+	public JButton getCalculate() {
+		return calculate;
+	}
+
+	public JButton getLoadFile() {
+		return loadFile;
+	}
+
+	public JTextField getTextField() {
+		return textField;
+	}
+
+	public JTextField getTextField_1() {
+		return textField_1;
+	}
+
+	public JTextField getTextField_2() {
+		return textField_2;
+	}
+
+	public JTextField getTextField_3() {
+		return textField_3;
+	}
+	
 }

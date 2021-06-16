@@ -33,4 +33,5 @@ import org.osoa.sca.annotations.Service;
 public interface GenerarPts
 {
     int generarPts(long seed, long ptsTotales);
+    int generarPts(long seed, long ptsTotales, int nodos);
 }

@@ -26,7 +26,10 @@
  */
 package org.ow2.frascati.examples.helloworld.annotated;
 
-import java.util.Scanner;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
 
 import org.osoa.sca.annotations.Init;
 import org.osoa.sca.annotations.Reference;
@@ -38,10 +41,17 @@ implements Runnable
 	// SCA Reference
 	// --------------------------------------------------------------------------
 
-	private GenerarPts s;
-
+	private CalcularPi s;
+	
+	private GUI gui;
+	
+	private long seed;
+	private long ptsTotales;
+	private int nodos;
+	private int ptsDentro;
+	
 	@Reference(name="calcularPi")
-	public final void setGenerarPts(GenerarPts service)
+	public final void setGenerarPts(CalcularPi service)
 	{
 		this.s = service;
 	}
@@ -67,27 +77,32 @@ implements Runnable
 
 	public final void run()
 	{
-		System.out.println("Call the service...");
-		System.out.println("=============================================");
-		System.out.println("Digite el seed");
-		Scanner sc = new Scanner(System.in);
-		long seed = sc.nextLong();
-		System.out.println("Digite el numero de puntos totales");
-		long ptsTotales = sc.nextLong();
+		try {
+			gui = new GUI();
+			gui.setLocationRelativeTo(null);
+			gui.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			gui.setVisible(true);
+			guiEvents();
+	    } catch (Exception e) {
+            e.printStackTrace();
+	    }
 		
-		int ptsDentro = s.generarPts(seed, ptsTotales);
-		
-		System.out.println(ptsDentro);
-		
-		double pi = calcularPi(ptsDentro, ptsTotales);
-		
-		System.out.println(pi);
 	}
 
-	public double calcularPi(long ptsDentro, long ptsTotal) {
-		
-        double pi = 4 * ((double) ptsDentro / (ptsTotal));
-        
-        return pi;
+	private void guiEvents() {
+		gui.getCalculate().addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				
+				seed = Long.parseLong(gui.getSeedTF().getText().trim());
+				ptsTotales = Long.parseLong(gui.getPointsTF().getText().trim());
+				nodos = Integer.parseInt(gui.getNodesTF().getText().trim());
+				
+				double pi = s.calcularPi(seed, ptsTotales, nodos);
+				
+				gui.getTextField_3().setText("El valor de pi es: " + pi);
+				
+			}
+		});		
 	}
 }
