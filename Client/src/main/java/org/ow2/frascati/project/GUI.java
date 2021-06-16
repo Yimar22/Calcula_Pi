@@ -1,4 +1,4 @@
-package java.org.ow2.frascasti.proyecto.calcularpi.annotated;
+package org.ow2.frascati.project.calcula-pi.annotated;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
