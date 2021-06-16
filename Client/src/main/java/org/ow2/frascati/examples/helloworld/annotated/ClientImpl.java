@@ -40,7 +40,7 @@ implements Runnable
 
 	private GenerarPts s;
 
-	@Reference
+	@Reference(name="calcularPi")
 	public final void setGenerarPts(GenerarPts service)
 	{
 		this.s = service;
@@ -75,7 +75,9 @@ implements Runnable
 		System.out.println("Digite el numero de puntos totales");
 		long ptsTotales = sc.nextLong();
 		
-		long ptsDentro = s.generarPts(seed, ptsTotales);
+		int ptsDentro = s.generarPts(seed, ptsTotales);
+		
+		System.out.println(ptsDentro);
 		
 		double pi = calcularPi(ptsDentro, ptsTotales);
 		
@@ -84,7 +86,7 @@ implements Runnable
 
 	public double calcularPi(long ptsDentro, long ptsTotal) {
 		
-        double pi = 4 * (ptsDentro / (ptsTotal));
+        double pi = 4 * ((double) ptsDentro / (ptsTotal));
         
         return pi;
 	}

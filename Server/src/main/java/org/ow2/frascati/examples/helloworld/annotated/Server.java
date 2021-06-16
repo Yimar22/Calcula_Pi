@@ -40,10 +40,10 @@ public class Server
         System.out.println("SERVER created.");
     }
 
-	public long generarPts(long seed, long ptsTotales) {
+	public int generarPts(long seed, long ptsTotales) {
 		Random rnd = new Random(seed);
 		
-		long dentro = 0;
+		int dentro = 0;
 		
 		double x, y;
 		
@@ -56,6 +56,8 @@ public class Server
 				dentro++;
 			}
 		}
+		
+		System.out.println(dentro);
 		
 		return dentro;
 
