@@ -26,6 +26,8 @@
 package org.ow2.frascati.examples.helloworld.annotated;
 
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.osoa.sca.annotations.Property;
 
@@ -41,6 +43,7 @@ public class Node
     }
 
 	public int generarPts(long seed, long ptsTotales) {
+		
 		Random rnd = new Random(seed);
 		
 		int dentro = 0;
@@ -64,7 +67,51 @@ public class Node
 	}
 
 	public int generarPts(long seed, long ptsTotales, int nodos) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		Random rnd = new Random(seed);
+		
+		long hilos = (j-i) / 10000000;
+		
+		if(hilos == 0) {
+			hilos == 1;
+		}
+		
+		final long points = (j-i) / hilos;
+		
+		int dentro = 0;
+		
+		ExecutorService executor = Executors.newFixedThreadPool((int)threads);
+		
+		double x, y;
+		
+		for(int k = 0; k < threads; k++) {
+            Thread newHilo = new Thread() {
+                
+                public void run() {
+                    System.out.println("Hilo arranca");
+                    try {
+                        for (int j = 0; j < points; j++) {
+
+                            x = random.nextDouble();
+                            y = random.nextDouble();
+        
+                            if ((x * x) + (y * y) <= 1) {
+                                dentro++;
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Algo salio mal");
+                    }
+                }
+            };
+            executor.execute(newHilo);
+        }
+		
+		System.out.println(dentro);
+		
+		executor.shutdown();
+        while (!executor.isTerminated());
+		
+		return dentro;
 	}
 }

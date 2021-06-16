@@ -98,7 +98,7 @@ implements Runnable
 				ptsTotales = Long.parseLong(gui.getPointsTF().getText().trim());
 				nodos = Integer.parseInt(gui.getNodesTF().getText().trim());
 				
-				double pi = s.calcularPi(seed, ptsTotales, nodos);
+				double pi = s.calcularPi(ptsTotales, nodos, seed);
 				
 				gui.getTextField_3().setText("El valor de pi es: " + pi);
 				

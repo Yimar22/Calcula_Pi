@@ -44,6 +44,11 @@ public class Server implements CalcularPi
     private GenerarPts generarPts2;
     private GenerarPts generarPts3;
     
+    private static long ptsDentro;
+    private static long inicio2 = 0;
+    private static long inicio3 = 0;
+    private static long inicio4 = 0;
+    
     private static ArrayList<GenerarPts> nodes = new ArrayList<GenerarPts>();
     
     @Reference(name="generarPts")
@@ -75,7 +80,7 @@ public class Server implements CalcularPi
         System.out.println("SERVER created.");
     }
 	
-	public double calcularPi(long ptsTotal, int nodos, long seed) {
+	public double calcularPi(final long ptsTotal, int nodos, final long seed) {
 		
 		long inicio = System.currentTimeMillis();
 		
@@ -84,36 +89,145 @@ public class Server implements CalcularPi
 		nodes.add(generarPts2);
 		nodes.add(generarPts3);
 		
-		int ptsDentro = 0;
+		ptsDentro = 0;
 		
 		ExecutorService executor = Executors.newFixedThreadPool(nodes.size());
 		
 		switch (nodos) {
 			case 1:
-				
-				
-				
+
+                Thread hilo = new Thread() {
+                    public void run() {
+                        try {
+                            ptsDentro += generarPts.generarPts(seed, 0, ptsTotal);
+                        } catch (Exception e) {
+                            System.out.println("Se produjo un error");
+                        }
+                    }
+                };
+                executor.execute(hilo);
 				break;
 				
 			case 2:
-				
+				inicio2 = ptsTotal/2;
+				Thread hilo2 = new Thread() {
+                    public void run() {
+                        try {
+                            ptsDentro += generarPts.generarPts(seed, 0, ptsTotal);
+                        } catch (Exception e) {
+                            System.out.println("Se produjo un error");
+                        }
+                    }
+                };
+                Thread hilo3 = new Thread() {
+                    public void run() {
+                        try {
+                            ptsDentro += generarPts1.generarPts(seed, 0, ptsTotal);
+                        } catch (Exception e) {
+                            System.out.println("Se produjo un error");
+                        }
+                    }
+                };
+                executor.execute(hilo2);
+                executor.execute(hilo3);
 				break;
 				
 			case 3:
-				
+				inicio2 = ptsTotal/2;
+				inicio3 = inicio2+inicio2;
+				Thread hilo4 = new Thread() {
+                    public void run() {
+                        try {
+                            ptsDentro += generarPts.generarPts(seed, 0, inicio2);
+                        } catch (Exception e) {
+                            System.out.println("Se produjo un error");
+                        }
+                    }
+                };
+                Thread hilo5 = new Thread() {
+                    public void run() {
+                        try {
+                            ptsDentro += generarPts1.generarPts(seed, inicio2, inicio3);
+                        } catch (Exception e) {
+                            System.out.println("Se produjo un error");
+                        }
+                    }
+                };
+                Thread hilo6 = new Thread() {
+                    public void run() {
+                        try {
+                            ptsDentro += generarPts2.generarPts(seed, inicio3, ptsTotal);
+                        } catch (Exception e) {
+                            System.out.println("Se produjo un error");
+                        }
+                    }
+                };
+                executor.execute(hilo4);
+                executor.execute(hilo5);
+                executor.execute(hilo6);
 				break;
 				
 			case 4:
-				
+				inicio2 = ptsTotal/4;
+                inicio3 = ptsTotal/2;
+                inicio4 = inicio2+inicio3;
+                Thread thread7 = new Thread() {
+                    public void run() {
+                        try {
+                            ptsDentro += generarPts.generarPts(seed, 0, inicio2);
+                        } catch (Exception e) {
+                            System.out.println("Se produjo un error");
+                        }
+                    }
+                };
+                Thread thread8 = new Thread() {
+                    public void run() {
+                        try {
+                        	ptsDentro += generarPts1.generarPts(seed, inicio2, inicio3);
+                        } catch (Exception e) {
+                            System.out.println("Se produjo un error");
+                        }
+                    }
+                };
+                Thread thread9 = new Thread() {
+                    public void run() {
+                        try {
+                        	ptsDentro += generarPts2.generarPts(seed, inicio3, inicio4);
+                        } catch (Exception e) {
+                            System.out.println("Se produjo un error");
+                        }
+                    }
+                };
+                Thread thread0 = new Thread() {
+                    public void run() {
+                        try {
+                        	ptsDentro += generarPts3.generarPts(seed, inicio4, ptsTotal);
+                        } catch (Exception e) {
+                            System.out.println("Se produjo un error");
+                        }
+                    }
+                };
+                executor.execute(thread7);
+                executor.execute(thread8);
+                executor.execute(thread9);
+                executor.execute(thread0);
 				break;
 				
 			default:
+				System.out.println("Digite entre 1 y 4 nodos");
 				break;
 		}
 		
-        double pi = 4 * ((double) ptsDentro / (ptsTotal));
-        
-        return pi;
+		executor.shutdown();
+		
+		while (!executor.isTerminated());
+			
+			double pi = 4 * ((double) ptsDentro / (ptsTotal));
+			long finalT = System.currentTimeMillis();
+	        long duracion = (finalT - inicio);
+	        System.out.println(duracion);
+	        return pi;
+	        
 	}
 	
 }

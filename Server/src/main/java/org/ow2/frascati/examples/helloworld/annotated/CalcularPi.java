@@ -32,5 +32,5 @@ import org.osoa.sca.annotations.Service;
 @Service
 public interface CalcularPi
 {
-	double calcularPi(long ptsTotal, int nodos, long seed)
+	double calcularPi(long ptsTotal, int nodos, long seed);
 }
