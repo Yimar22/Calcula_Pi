@@ -11,15 +11,24 @@
 
   <component name="client">
 
+    <property name="serverUri">rmi://localhost:1099/rmiservice</property>
+
     <service name="r">
       <interface.java interface="java.lang.Runnable" />
     </service>
 
-    <reference name="calcularPi">
-      <frascati:binding.rmi host="localhost" serviceName="rmiservice" port="1099"/>
+	<service name="generarPts">
+   <frascati:binding.rmi host="localhost" serviceName="GenerarPts" port="2003"/>
+      <interface.java interface="main.java.org.ow2.frascati.finalproject.calculatepi.annotated.GenerarPts" />
     </reference>
 
-    <implementation.java class="org.ow2.frascati.examples.helloworld.annotated.ClientImpl" />
+    <reference name="calcularPi">
+      <frascati:binding.rmi host="localhost" serviceName="rmiservice" port="1099"/>
+   <interface.java interface="main.java.org.ow2.frascati.finalproject.calculatepi.annotated.CalcularPi" />
+    </reference>
+
+    <implementation.java class="main.java.org.ow2.frascati.finalproject.calculatepi.annotated.ClientImpl;" />
+   
 
   </component>
 

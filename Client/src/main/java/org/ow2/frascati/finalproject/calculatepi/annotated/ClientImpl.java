@@ -1,36 +1,11 @@
-/**
- * OW2 FraSCAti Examples: HelloWorld RMI
- * Copyright (C) 2008-2010 INRIA, University of Lille 1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * Contact: frascati@ow2.org
- *
- * Author: Damien Fournier
- * 
- * Contributor(s): Nicolas Dolet
- *                 Philippe Merle
- *
- */
-package main.java.org.ow2.frascati.finalproject.calculatepi.annotated;
+package org.ow2.frascati.finalproject.calculatepi.annotated;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 
+import org.oasisopen.sca.annotation.Property;
 import org.osoa.sca.annotations.Init;
 import org.osoa.sca.annotations.Reference;
 
@@ -41,19 +16,27 @@ implements Runnable
 	// SCA Reference
 	// --------------------------------------------------------------------------
 
-	private CalcularPi s;
+	private BringPointsAPI s;
+	private BrokerService bs;
 	
-	private GUI gui;
+	private static GUI gui;
 	
 	private long seed;
 	private long ptsTotales;
 	private int nodos;
-	private int ptsDentro;
+
+	@Property
+	private String clienturi;
 	
-	@Reference(name="calcularPi")
-	public final void setGenerarPts(CalcularPi service)
+	@Reference(name="bringPointsAPI")
+	public final void setGenerarPts(BringPointsAPI service)
 	{
 		this.s = service;
+	}
+
+	@Reference(name = "enlaceBroker")
+	public final void setBrokerService(BrokerService service){
+		this.bs=service;
 	}
 
 	//--------------------------------------------------------------------------
@@ -78,6 +61,7 @@ implements Runnable
 	public final void run()
 	{
 		try {
+			bs.attachClient(clienturi);
 			gui = new GUI();
 			gui.setLocationRelativeTo(null);
 			gui.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -93,14 +77,16 @@ implements Runnable
 		gui.getCalculate().addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
+				long tinicio = 0;
+				long tfinal = 0;
 				
 				seed = Long.parseLong(gui.getSeedTF().getText().trim());
 				ptsTotales = Long.parseLong(gui.getPointsTF().getText().trim());
 				nodos = Integer.parseInt(gui.getNodesTF().getText().trim());
-				
-				double pi = s.calcularPi(ptsTotales, nodos, seed);
-				
-				gui.getTextField_3().setText("El valor de pi es: " + pi);
+				tinicio = System.currentTimeMillis();
+				long pi = s.bringPts(ptsTotales, nodos, seed);
+				tfinal = System.currentTimeMillis();
+				gui.getTextField_3().setText("El valor de pi es: " + pi + " y el tiempo de espera fue: "+(tfinal-tinicio));
 				
 			}
 		});		

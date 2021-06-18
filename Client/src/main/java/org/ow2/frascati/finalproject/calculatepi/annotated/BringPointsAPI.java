@@ -22,7 +22,7 @@
  *                 Nicolas Dolet
  *                 Philippe Merle
  */
-package main.java.org.ow2.frascati.finalproject.calculatepi.annotated;
+package org.ow2.frascati.finalproject.calculatepi.annotated;
 
 import org.osoa.sca.annotations.Service;
 
@@ -30,7 +30,7 @@ import org.osoa.sca.annotations.Service;
  * A basic service used to print messages. 
  */
 @Service
-public interface CalcularPi
+public interface BringPointsAPI
 {
-	double calcularPi(long ptsTotal, long seed);
+	long bringPts(long ptsTotal, int nodos, long seed);
 }

@@ -22,7 +22,7 @@
  *                 Nicolas Dolet
  *                 Philippe Merle
  */
-package main.java.org.ow2.frascati.finalproject.calculatepi.annotated;
+package org.ow2.frascati.finalproject.calculatepi.annotated;
 
 import org.osoa.sca.annotations.Service;
 
